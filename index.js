@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import http from 'http';
 import fs from 'fs';
+import axios from 'axios';
 
 const PORT = 8000;
 const localhost = 'localhost';
@@ -23,7 +24,7 @@ server.listen(PORT, localhost, () => {
         console.error('Erreur écriture du fichier :', err);
         return;
       }
-      console.log('Le fichier créé et écrit');
+      console.log('Fichier créé et écrit');
       
 
       fs.readFile('message.txt', 'utf8', (err, data) => {
@@ -33,6 +34,22 @@ server.listen(PORT, localhost, () => {
         }
         console.log('Contenu du fichier :');
         console.log(data);
-      });
+
+        // bonus
+        axios.get('http://www.google.com/')
+        .then(response => {
+          
+          fs.writeFile('google.html', response.data, (err) => {
+            if (err) {
+              console.error('Erreur écriture du fichier Google :', err);
+              return;
+            }
+            console.log('Google a été enregistrée dans google.html');
+          });
+        })
+        .catch(error => {
+          console.error('Erreur récupération de la page Google :', error);
+        });
     });
   });
+});
